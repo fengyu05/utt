@@ -13,14 +13,19 @@ def main(argv):
     return
   fileName = argv[1]
   preLines = []
-  lines = []
+  importLines = []
+  packageLines = []
   postLines = []
+
   found = False
 
   with open(fileName, 'r') as f:
     for line in f:
-      if line.startswith('import ') or line.startwith('package '):
-        lines.append(line)
+      if line.startswith('import '):
+        importLines.append(line)
+        found = True
+      elif line.startswith('package '):
+        packageLines.append(line)
         found = True
       else:
         if found:
@@ -28,14 +33,39 @@ def main(argv):
         else:
           preLines.append(line)
 
-  lines = list(set(lines)) #unique lines
+  packageLines = list(set(packageLines)) #unique lines
+  importLines = list(set(importLines)) #unique lines
+
+  packageLines.sort()
+  importLines.sort()
 
   print "After sort -------------------------------------------------"
-  for line in lines:
-    print line
+  print ''.join(packageLines + ['\n'] + importLines)
   print "Result end -------------------------------------------------"
 
-  lines = preLines + lines + postLines
+  # remove ending empty preline
+  filteredPreLines = []
+  found = False
+  preLines.reverse()
+  for line in preLines:
+    if not found and line == '\n':
+      continue
+    else:
+      found = False
+      filteredPreLines.append(line)
+  filteredPreLines.reverse()
+
+  # remove pending empty postline
+  filteredPostLines = []
+  found = False
+  for line in postLines:
+    if not found and line == '\n':
+      continue
+    else:
+      found = True
+      filteredPostLines.append(line)
+
+  lines = filteredPreLines + packageLines + ['\n'] + importLines + ['\n'] + filteredPostLines
 
   homeDir = os.environ['HOME']
   backupFileName = str(uuid.uuid4())
