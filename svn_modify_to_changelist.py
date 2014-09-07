@@ -24,6 +24,8 @@ def main(argv):
       break
     if line.startswith('M'):
       modifyFiles.append(line.split('M')[-1].strip())
+    if line.startswith('A'):
+      modifyFiles.append(line.split('A')[-1].strip())
 
   print 'Found modified files:---------------'
   for line in modifyFiles:
