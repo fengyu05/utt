@@ -1,0 +1,4 @@
+# /bin/bash
+cd /home/zhdeng/cron/mail/
+DISPLAY=':0.0' /home/zhdeng/cron/mail/scin_monitoring.py --mode prod
+
