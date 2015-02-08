@@ -1,7 +1,7 @@
 #!/usr/bin/python
 
-""" 
-Grasp all svn update without changelist to change list
+"""
+Grasp all files in a changelist and open it in vim
 """
 import sys
 import os
@@ -11,6 +11,10 @@ def main(argv):
   if len(argv) < 2:
     print '%s changelist' % argv[0]
     return
+  target = argv[1]
+
+  targetStartedLine = "--- Changelist '%s'" % target
+  otherStartedLine = "--- Changelist"
 
   ps = subprocess.Popen('svn st',
       shell=True, stdout=subprocess.PIPE,stderr=subprocess.STDOUT)
@@ -19,9 +23,17 @@ def main(argv):
 
   modifyFiles = []
 
+  started = False
   for line in lines:
-    if line.startswith('--- Changelist'):
-      break
+    if started:
+      if line.startswith(otherStartedLine):
+        started = False
+        continue
+    else:
+      if line.startswith(targetStartedLine):
+        started = True
+      continue
+
     if line.startswith('M'):
       modifyFiles.append(line[1:].strip())
     if line.startswith('A'):
@@ -34,11 +46,14 @@ def main(argv):
     print line
   print 'List files end --------------------'
 
-  allFiles = ' '.join(modifyFiles) 
+  allFiles = ' '.join(modifyFiles)
 
-  cmd = 'svn changelist %s %s' % (argv[1], allFiles)
-  print cmd
-  assert os.system(cmd) == 0
+  print allFiles
+
+  cmd = 'vim %s' % (allFiles)
+  os.system(cmd)
 
 if __name__ == '__main__':
   main(sys.argv)
+
+
