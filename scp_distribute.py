@@ -25,19 +25,21 @@ USAGE = {
 _networkLoaded = False
 
 def makeAlias():
+  printRun('mkdir -p ~/bin')
   printRun('echo \'%s\' > ~/bin/copy_to' %COPY_TO_ALIAS)
   printRun('echo \'%s\' > ~/bin/copy_from' %COPY_FROM_ALIAS)
   printRun('chmod a+x ~/bin/copy_to')
   printRun('chmod a+x ~/bin/copy_from')
 
-def printRun(cmd):
+def printRun(cmd, skipAssert=False):
   print cmd
-  assert os.system(cmd) == 0
+  if not skipAssert:
+    assert os.system(cmd) == 0
 
 def prepare(thisCmd):
   print 'Init ...'
   printRun('mkdir -p %s' % INCOMING)
-  printRun('cp -f %s %s' % (thisCmd, CMD_FILE))
+  printRun('diff %s %s || cp %s %s' % (CMD_FILE, thisCmd, thisCmd, CMD_FILE))
   makeAlias()
 
 
@@ -144,6 +146,7 @@ def main(argv):
   elif mode == 'edit' or mode == 'list':
     editList()
   elif mode == 'sync':
+    prepare(argv[0])
     sync()
   elif mode == 'init':
     prepare(argv[0])

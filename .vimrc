@@ -57,11 +57,10 @@ let g:miniBufExplVSplit = 25
 let g:miniBufExplSplitBelow=1
 
 " buff ctrl
-nmap <leader>a :e
-nmap <leader>e :e
+nmap <leader>a :e 
+nmap <leader>e :e  
 nmap <leader>z :ls<cr>
 nmap <leader>g :GtImporter<cr>
-
 
 " window and buff navigation
 nmap <Tab> :bn<cr>
@@ -79,14 +78,15 @@ map <C-l> <C-W>l
 nmap <F2> :source ~/.vimrc<cr>
 nmap <F3> :e ~/.vimrc<cr>
 nmap <F4> :bd<cr>
-nmap <F5> :MRU<cr>
+nmap <F5> :Tlist<cr>
 nmap <F6> :MRU<cr>
 nmap <F7> :set number! number?<cr>
 nmap <F8> :set nopaste! nopaste?<cr>
 nmap <F9> :call FindUniqueWords()<cr>
 
 nmap <leader><F12> :qa!<cr>
-nmap <leader><F9> :call GoogleNit()<cr>
+nmap <leader><F11> :call PlainMode()<cr>
+nmap <leader><F10> :call PlainMode()<cr>
 nmap <c-`> <esc>
 
 " function key alt
@@ -116,7 +116,6 @@ set so=7
 " word correct
 iab pirnt print
 
-
 " FileType shortcut
 au FileType java call MyJavaConfig()
 function! MyJavaConfig()
@@ -125,10 +124,13 @@ iab FlagSpec @FlagSpec(altName = "", help = "")<cr>public static final Flag<
 iab Loggers private static final FormattingLogger logger =<cr>Loggers.getContextFormattingLogger();
 endfunction
 
+au FileType python call MyPythonConfig()
+function! MyPythonConfig()
+iab __name__ __name__ == '__main__':<cr>main()
+endfunction
 
 "set shell=bash\ -l don't work
 "set shellcmdflag=-ic work
-
 
 " function
 " Returns true if paste mode is enabled
@@ -198,9 +200,7 @@ set title " Let vim change my tab/window title
 set autoread
 setlocal textwidth=500
 colorscheme elflord
-setlocal spell spelllang=en_us
 match Label /\s\u\w\+\s/
-
 
 set lbr
 set ai "Auto indent
@@ -225,11 +225,10 @@ let g:miniBufExplVSplit = 25
 let g:miniBufExplSplitBelow=1
 
 " buff ctrl
-nmap <leader>a :e 
-nmap <leader>e :e 
+nmap <leader>a :e  
+nmap <leader>e :e  
 nmap <leader>z :ls<cr>
 nmap <leader>g :GtImporter<cr>
-
 
 " window and buff navigation
 nmap <Tab> :bn<cr>
@@ -252,8 +251,7 @@ nmap <F7> :set number! number?<cr>
 nmap <F8> :set nopaste! nopaste?<cr>
 
 nmap <leader><F12> :qa!<cr>
-nmap <leader><F6> :e ~/utildata/crush_frequent_words<cr>
-nmap <leader><F9> :call GoogleNit()<cr>
+nmap <leader><F9> :call PlainMode()<cr>
 nmap <c-`> <esc>
 
 " function key alt
@@ -283,8 +281,6 @@ set so=7
 " word correct
 iab pirnt print
 
-
-
 " FileType shortcut
 au FileType java call MyJavaConfig()
 function! MyJavaConfig()
@@ -295,14 +291,11 @@ endfunction
 
 augroup filetypedetect
   au BufNewFile,BufRead *.pig set filetype=pig syntax=pig
-augroup END 
+augroup END
 "set shell=bash\ -l don't work
 "set shellcmdflag=-ic work
 
-
-
-" function
-" Returns true if paste mode is enabled
+" Function begin here, Function mush start with capital letter.
 function! HasPaste()
 if &paste
 return 'PASTE MODE '
@@ -325,4 +318,15 @@ function! FindUniqueWords()
   for word in keys(uq_worbs)
   endfor
   echo sort(keys(uq_worbs))
+endfunction
+
+function! PlainMode()
+set nonu
+only
+endfunction
+
+function! FindAllTag()
+  echo 'FindAllTag'
+  echo expand("<cword>")
+  ta /expand("<cword>")
 endfunction

@@ -1,4 +1,4 @@
-# .bashrc
+#.bashrc
 
 # Source global definitions
 if [ -f /etc/bashrc ]; then
@@ -52,22 +52,40 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 fi
 
 ##########################################################################################
-# gnefihz begin here
+# zhdeng begin here
 ##########################################################################################
-if [ -d ~/bin ]; then
-  PATH=$PATH:~/bin
-fi
-if [ -d ~/utt ]; then
-  PATH=$PATH:~/utt
-fi
+# append path
+export ALL_NEW_PATH="
+  $HOME/bin
+  $HOME/bin/activator/activator-1.2.12
+  $HOME/utt
+  $HOME/adsutt
+  $HOME/mlutt
+  $HOME/spark/bin
+  $HOME/expect
+  /usr/local/apache-maven/bin
+  $HOME/voldemort/bin
+  /opt/likewise/bin
+  "
+  
+for newPath in $ALL_NEW_PATH
+do
+  if [ -d $newPath ]; then
+    PATH=$PATH:$newPath
+  fi
+done
+  
 
 export EDITOR='vi'
 export localhost=127.0.0.1
-export HOME_IP=172.21.106.42
-export PLAY=$HOME/workspace/playground
+export HOME_IP=`ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'`
 export HOST_NAME=`cat $HOME/.HOST_NAME`
 export WP=$HOME/workspace
+export M2_HOME=/usr/local/apache-maven
+export M2=$M2_HOME/bin
 
+# ALIAS ALIAS
+alias work='ssh zhdeng@zhdeng-ld1'
 alias ls='ls --color=auto'
 alias grep='grep --color=auto'
 alias fgrep='fgrep --color=auto'
@@ -77,34 +95,67 @@ alias la='ls -A'
 alias l='ls -CF'
 alias cls="clear"
 alias more="less" # more is less
-alias listjar="jar tf"
+alias listjar="ls *.jar | xargs -Ifn sh -c 'echo fn;jar tf fn'"
 alias check_port='netstat -lpn'
 alias blaze='ligradle'
 alias svn='svin'
+alias gradle='ligradle'
 alias rf='record_file'
 alias list='list_file'
 alias lf='load_file'
 alias hfs="hadoop fs"
 alias wp='cd ~/workspace'
 alias forecast_wp='wp;cd forecast_trunk'
+alias nertz_fcst='cd $HOME/production/nertz_fcst'
+alias fcst_nertz='cd $HOME/production/nertz_fcst'
+alias fcst_dep='ligradle offline:forecasting-offline-common:dependencies | tee dep.list'
+alias h2clean='cd $HOME/production/h2clean'
 alias network_wp='wp;cd network_trunk'
-alias mlutt='wp;cd mlutt'
-alias adsutt='wp;cd adsutt'
+alias mlutt='cd $HOME/mlutt'
+alias adsutt='cd $HOME/adsutt'
 alias adsrele='wp;cd ads-relevance_trunk'
 alias tscp='wp;cd tscp_trunk'
+alias tscp_backend='wp;cd tscp-backend_trunk'
+alias metronome='wp;cd metronome_trunk'
 alias cd_liar='network_wp; cd liar/'
 alias cd_lame='network_wp; cd liar/lame/java/com/linkedin/liar/lame/'
 alias cd_liarloser='network_wp; cd liar/loser/java/com/linkedin/liar/'
 alias cd_loser='wp; cd loser_trunk'
 alias cd_csp_impl='network_wp; cd sasbe/cspserving-impl'
+alias cd_sasbe='network_wp; cd sasbe'
 alias cd_network='network_wp;'
 alias cd_recls='wp;cd recls'
 alias cd_model_sample='recls; cd autobahn/models/lame'
+alias cd_floor='wp;cd member-floor'
+alias cd_log='cd /export/content/lid/apps/apps/dev-i001/logs'
+alias cd_tomcat_log='cd /export/content/lid/apps/tomcat/dev-i001/logs'
+alias cd_fcst_log='cd /export/content/lid/apps/forecasting-service/dev-i001/logs' 
+alias cd_fcst_war='cd $HOME/local-repo/com/linkedin/forecast/forecasting-service-war' 
+alias tail_log='cd_log;tail -f apps.out'
+alias fcst_monitoring='wp;cd fcst-monitoring'
+alias tail_fcst_log='cd_fcst_log;tail -f forecasting-service.out' 
+alias tail_tomcat_log='cd_tomcat_log;tail -f catalina.out'
 alias recls='wp;cd recls'
 alias cd_pg='wp;cd playground'
 alias uscp='wp;cd uscp_trunk'
 alias ssh_prod_csp='ssh-range -f PROD-ELA4 csp-service'
+alias ssh_ei_csp='ssh-range -f EI1 csp-service'
 alias gitcommit='git commit -m whatever'
+alias kill_fg='kill -9 $(jobs -p)'
+alias restli_get='curli --pretty-print "%s" -X GET -g'
+alias build_and_release='ligradle build -x test;mint release'
+alias git_info='git remote show origin'
+alias build_without_test='ligrade build -x test'
+alias jar_list='jar tf '
+alias sasAjax='ff SasAjaxController.java;rf3'
+alias mint_devdeploy='mint build;mint release;mint build-cfg -f dev;mint release-cfg;mint deploy'
+alias mint_qeideploy='mint build;mint release;mint build-cfg -f QEI1;mint release-cfg;mint deploy'
+alias mint_qei2deploy='mint build;mint release;mint build-cfg -f QEI2;mint release-cfg;mint deploy'
+alias undeploy_sas='mint undeploy -f QEI1 -w sas-war && mint kill && mint clean-containers'
+alias deploy_sas='ligradle :sas:sas-war:build && mint build-cfg -f QEI1 -w sas-war && mint deploy -f QEI1 -w sas-war --debug-app'
+alias deploy_sas2='ligradle :sas:sas-war:build && mint build-cfg -f QEI2 -w sas-war && mint deploy -f QEI2 -w sas-war --debug-app'
+alias deploy_zookeeper='mint deploy -w zookeeper-war'
+alias aws_dev='ssh -i ~/.keycache/amazon.pem ec2-user@54.187.146.185'
 
 alias rf1='record_file $F1'
 alias rf2='record_file $F2'
@@ -115,6 +166,17 @@ alias rf6='record_file $F6'
 alias rf7='record_file $F7'
 alias rf8='record_file $F8'
 alias rf9='record_file $F9'
+
+bind '"\eOP":"vim $F1\n"'
+bind '"\eOQ":"vim $F2\n"'
+bind '"\eOR":"vim $F3\n"'
+bind '"\eOS":"vim $F4\n"'
+bind '"\e[15~":"vim $F5\n"'
+bind '"\e[17~":"vim $F6\n"'
+bind '"\e[18~":"vim $F7\n"'
+bind '"\e[19~":"vim $F8\n"'
+bind '"\e[20~":"vim $F9\n"'
+bind '"\e[21~":"vim $F10\n"'
 
 PS1="=== $HOST_NAME === \u@\w\$"
 
@@ -255,11 +317,17 @@ function source_file() {
   else
     TARGET=$1
   fi
-  find $TARGET -type d \( -path "*/.svn" -o -path "*/build" -o -path "*/.git" \) -prune -o -type f -exec grep -Il . {} \;
+  find $TARGET -type d \( -path "*/.svn" -o -path "*/build" -o -path "*/.git"  \) -prune -o \
+  -type f \( -iname "tags" \) -prune -o -type f -exec grep -Il . {} \;
+}
+
+function list_all_build() {
+  _mapff `find . -name 'build.gradle'`
 }
 
 _mapff() {
 i=1
+export __all_ff=$* 
 for file in $* 
 do
   export F$i=$file
@@ -273,15 +341,24 @@ _ff() {
     echo "usage: ff filepattern"
     return
   fi
-  find . -name *"$1"* -o -type d \( -path "*/build" -o -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn"
+# \* escaping the asterisk avoid shell expanding
+  find . -name \*"$1"\* -o -type d \( -path "*/build" -o -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn"
+}
+
+_ffb() {
+  if [ $# -lt 1 ] ; then
+    echo "usage: ff filepattern"
+    return
+  fi
+  find . -name \*"$1"\* -o -type d \( -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v ".git|.svn"
 }
 
 ff() {
-if [ $# -lt 1 ] ; then
-echo "usage: ff filepattern"
-return
-fi
-_mapff `find . -name *"$1"* -o -type d \( -path "*/build" -o -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn"`
+  _mapff `_ff $*`
+}
+
+ffb() {
+  _mapff `_ffb $*`
 }
 
 gff() {
@@ -289,7 +366,7 @@ if [ $# -lt 1 ] ; then
 echo "usage: ff filepattern"
 return
 fi
-_mapff `find $WP -name *"$1"* -o -type d \( -path "*/build" -o -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn" | grep --color $1`
+_mapff `find $WP -name \*"$1"\* -o -type d \( -path "*/build" -o -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn" | grep --color $1`
 }
 
 load_file() {
@@ -301,7 +378,7 @@ fi
 }
 
 editall () {
-vim $F1 $F2 $F3 $F4 $F5 $F6 $F7 $F8 $F9
+vim $__all_ff 
 }
 
 loadall () {
@@ -312,16 +389,16 @@ function motto() {
 sort -R ~/motto | head -n 1
 }
 
-function build_forecast() {
-  ligradle build
-  ff *.zip
-  cp $F1 ~/tmp/
-  cp $F3 ~/tmp/
-  cp $F3 ~/tmp/
-}
-
 function magic() {
   ssh -K eat1-magicgw01.grid.linkedin.com
+}
+
+function nertz() {
+  ssh -K eat1-nertzgw01.grid.linkedin.com
+}
+
+function nertz2() {
+  ssh -K eat1-nertzgw02.grid.linkedin.com
 }
 
 function copy_from_magic() {
@@ -332,6 +409,18 @@ function copy_from_magic() {
   name=`basename $1`
   echo "ssh copying..."
   ssh -q -K -tt eat1-magicgw01.grid.linkedin.com "rm -rf ~/.magic_file_cache;mkdir ~/.magic_file_cache;hadoop fs -copyToLocal $1 ~/.magic_file_cache/;copy_to_home ~/.magic_file_cache/$name" 
+  rm -rf ./$name
+  mv ~/incoming/$name ./$name
+}
+
+function copy_all_from_magic() {
+  if [ $# -lt 1 ] ; then
+    echo "copy_from_magic path"
+    return 1
+  fi
+  name=`basename $1`
+  echo "ssh copying..."
+  ssh -q -K -tt eat1-magicgw01.grid.linkedin.com "rm -rf ~/.magic_file_cache;mkdir -p ~/.magic_file_cache/$name;hadoop fs -copyToLocal $1/* ~/.magic_file_cache/$name/;copy_to_home ~/.magic_file_cache/$name" 
   mv ~/incoming/$name ./$name
 }
 
@@ -359,6 +448,10 @@ function copy_to_laptop() {
   scp -r $1 zhdeng@zhdeng-mn1:~/incoming
 }
 
+function prun() {
+  echo $*
+  eval "$*"
+}
 
 function record_file() {
   if [ $# -lt 1 ] ; then echo "Need one arg"; fi
@@ -374,7 +467,19 @@ function list_file() {
 }
 
 function svn_update_review() {
+  if [ $# -lt 2 ]; then
+    echo "svn_update_review reviewNo changelist"
+    return 1
+  fi
   svn review --update $1 --changelist $2
+}
+
+function svn_changelist_add() {
+  if [ $# -lt 2 ]; then
+    echo "svn_changelist_add changelist file"
+    return 1
+  fi
+  svn changelist $1 $2
 }
 
 function svn_review_changelist() {
@@ -382,10 +487,7 @@ function svn_review_changelist() {
 }
 
 function svn_remove_cl() {
-  svn status |\
-    sed -n "/--- Changelist '$1':/,/--- Changelist.*/p" |\
-    grep -v '^--- Changelist' |\
-    awk '{print $2}' |\
+  svn status | sed -n "/--- Changelist '$1':/,/--- Changelist.*/p" | grep -v '^--- Changelist' | cut -c 2- | \
     xargs svn changelist --remove
 }
 
@@ -394,34 +496,67 @@ function gradle_clean_build_zip() {
 }
 
 function deploy_csp_withconfig() {
-  mint dev build build-cfg deploy -w sasbe-cspserving-war -f QEI2
+  mint dev build build-cfg deploy -w sasbe-cspserving-war -f QEI1 
+}
+
+function deploy_campaign_withconfig() {
+  echo "mint dev build build-cfg deploy -w sasbe-campaign-war -f QEI1"
+  mint dev build build-cfg deploy -w sasbe-campaign-war -f QEI1
 }
 
 function cut_two_edge() {
   cat $1 | cut -c $2- | rev | cut -c $3- | rev
 }
 
-function deploy_csp() {
-  mint deploy --config QEI2 -w sasbe-cspserving-war
+function deploy() {
+  cmd="mint deploy --config QEI2 -w $1"
+  prun $cmd
 }
 
-function config_csp() {
-  mint build-cfg QEI2 -w sasbe-cspserving-war
+function deploy_withconfig() {
+  cmd="mint dev build build-cfg deploy -w $F1 -f QEI2"
+  prun $cmd
 }
 
-function vld_scin_model() {
-  ~/voldemort/bin/voldemort-shell.sh ScinModelCoefficientsV2 tcp://ei-voldemort-read-only-vip.stg.linkedin.com:10103/
+function find_war() {
+  _mapff `find /export -name *$1*`
 }
 
-function vld_single_node() {
-  cd $HOME/voldermort
-  bin/voldemort-server.sh config/single_node_cluster /tmp/voldemort.log &
+function undeflated() {
+  perl -MCompress::Zlib -e 'undef $/; print uncompress(<>)'
 }
 
-function vld_test_client() {
-  ~/voldermort/bin/voldemort-shell.sh test tcp://localhost:6666
+function ts2readable() {
+  date -d @$1
 }
 
+
+function unjar() {
+  if [ ! -f $1 ];
+  then
+    echo "$1 not exist"
+    return 1;
+  fi
+  base=`basename $1`
+  filename="${base%.*}"
+  echo $filename
+  rm -rf $filename
+  mkdir -p $filename
+  cp $1 $filename/
+  cd $filename
+  jar xf $1
+  cd ..
+}
+
+function unzip_jar() {
+  rm -rf zip
+  test -e $1 || return 1;
+  unzip $1 -d zip
+}
+
+function biggest_file() {
+  find $1 -printf '%s %p\n'| sort -nr | head -50
+}
 ############### sample section
 function _for_item() {
 array=(one two three four [5]=five)
