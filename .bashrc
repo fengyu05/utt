@@ -119,6 +119,7 @@ alias tscp_backend='wp;cd tscp-backend_trunk'
 alias metronome='wp;cd metronome_trunk'
 alias cd_liar='network_wp; cd liar/'
 alias cd_lame='network_wp; cd liar/lame/java/com/linkedin/liar/lame/'
+alias cd_az='wp; cd azkaban'
 alias cd_liarloser='network_wp; cd liar/loser/java/com/linkedin/liar/'
 alias cd_loser='wp; cd loser_trunk'
 alias cd_csp_impl='network_wp; cd sasbe/cspserving-impl'
@@ -137,10 +138,13 @@ alias tail_fcst_log='cd_fcst_log;tail -f forecasting-service.out'
 alias tail_tomcat_log='cd_tomcat_log;tail -f catalina.out'
 alias recls='wp;cd recls'
 alias cd_pg='wp;cd playground'
+alias cd_insight='wp;cd insight'
 alias uscp='wp;cd uscp_trunk'
 alias ssh_prod_csp='ssh-range -f PROD-ELA4 csp-service'
 alias ssh_ei_csp='ssh-range -f EI1 csp-service'
-alias gitcommit='git commit -m whatever'
+alias gitcommit='git commit -m "by auto commiter"'
+alias git_push_origin='git push -u origin master'
+alias git_list='git ls-tree -r master --name-only'
 alias kill_fg='kill -9 $(jobs -p)'
 alias restli_get='curli --pretty-print "%s" -X GET -g'
 alias build_and_release='ligradle build -x test;mint release'
@@ -156,6 +160,14 @@ alias deploy_sas='ligradle :sas:sas-war:build && mint build-cfg -f QEI1 -w sas-w
 alias deploy_sas2='ligradle :sas:sas-war:build && mint build-cfg -f QEI2 -w sas-war && mint deploy -f QEI2 -w sas-war --debug-app'
 alias deploy_zookeeper='mint deploy -w zookeeper-war'
 alias aws_dev='ssh -i ~/.keycache/amazon.pem ec2-user@54.187.146.185'
+alias fcst_do='_user_do fcst'
+alias bids_do='_user_do bids'
+alias liads_do='_user_do liads'
+alias fcst_init='_user_do fcst kinit -kt fcst.headless.keytab fcst'
+alias bids_init='_user_do bids kinit -kt bids.headless.keytab bids'
+alias liads_init='_user_do liads kinit -kt liads.headless.keytab liads'
+alias sibyl='cd ~/pip_dist/sibyl'
+alias update_az_ctrl='cp ~/mlutt/az_ctrl.py ~/workspace/tscp-backend_trunk/plugin/'
 
 alias rf1='record_file $F1'
 alias rf2='record_file $F2'
@@ -330,9 +342,14 @@ i=1
 export __all_ff=$* 
 for file in $* 
 do
+  if ((i % 2 == 0))
+  then
+    printf "\e[1;32m"
+  fi
   export F$i=$file
   echo "[F$i]" $file 
   let " i+= 1"
+  printf "\e[0m"
 done
 }
 
@@ -342,7 +359,7 @@ _ff() {
     return
   fi
 # \* escaping the asterisk avoid shell expanding
-  find . -name \*"$1"\* -o -type d \( -path "*/build" -o -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn"
+  find . -name \*"$1"\* -o -type d \( -path "*/build" -o -path "*/.svn" -o -path "*/zip" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn|./zip"
 }
 
 _ffb() {
@@ -366,7 +383,7 @@ if [ $# -lt 1 ] ; then
 echo "usage: ff filepattern"
 return
 fi
-_mapff `find $WP -name \*"$1"\* -o -type d \( -path "*/build" -o -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn" | grep --color $1`
+_mapff `find $WP -name \*"$1"\* -o -type d \( -path "*/build" -o -p "*/zip" -o -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn|./zip" | grep --color $1`
 }
 
 load_file() {
@@ -432,21 +449,6 @@ function kill_sth() {
 kill `ps aux | grep $1 | grep -v grep | cut -d " " -f 4`
 }
 
-function copy_to_magic() {
-  scp -r $1 zhdeng@eat1-magicgw01.grid.linkedin.com:~/incoming
-}
-
-function copy_to_canasta() {
-  scp -r $1 zhdeng@eat1-hcl0041.grid.linkedin.com:~/incoming
-}
-
-function copy_to_home() {
-  scp -r $1 zhdeng@$HOME_IP:~/incoming
-}
-
-function copy_to_laptop() {
-  scp -r $1 zhdeng@zhdeng-mn1:~/incoming
-}
 
 function prun() {
   echo $*
@@ -530,6 +532,10 @@ function ts2readable() {
   date -d @$1
 }
 
+function nertz_copy_from_magic() {
+  cmd="hadoop distcp -D dfs.checksum.type=CRC32 webhdfs://eat1-magicnn01.grid.linkedin.com:50070$1 hdfs://eat1-nertznn01.grid.linkedin.com:9000$2"
+  prun $cmd
+}
 
 function unjar() {
   if [ ! -f $1 ];
@@ -548,10 +554,21 @@ function unjar() {
   cd ..
 }
 
+function _user_do() {
+  user=$1
+  shift
+  cmd="sudo -E -u $user sh -c \"cd ~$user;$*\""
+  prun $cmd
+}
+
 function unzip_jar() {
   rm -rf zip
   test -e $1 || return 1;
   unzip $1 -d zip
+}
+
+function send_bashrc() {
+  copy_to $1 ~/.bashrc
 }
 
 function biggest_file() {

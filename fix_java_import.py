@@ -7,6 +7,16 @@ import os
 import uuid
 
 
+def importNameSpacePrefix(line):
+  if line.startswith('import '):
+    line.replace('import ', '')
+
+  if line.startswith('static '):
+    line.replace('sstatic ', '')
+  return line.split('.')[0]
+
+
+
 def main(argv):
   if len(argv) < 2:
     print '%s filename' % argv[0]
@@ -38,6 +48,15 @@ def main(argv):
 
   packageLines.sort()
   importLines.sort()
+
+  # new new line seporator
+  newImportLines = []
+  for line in importLines:
+    if len(newImportLines) > 0 and importNameSpacePrefix(line) != importNameSpacePrefix(newImportLines[-1]):
+      newImportLines.append('\n')
+    newImportLines.append(line)
+
+  importLines = newImportLines
 
   print "After sort -------------------------------------------------"
   print ''.join(packageLines + ['\n'] + importLines)
