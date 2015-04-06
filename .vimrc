@@ -56,11 +56,21 @@ let g:miniBufExplMapWindowNavVim = 1
 let g:miniBufExplVSplit = 25
 let g:miniBufExplSplitBelow=1
 
-" buff ctrl
-nmap <leader>a :e 
-nmap <leader>e :e  
-nmap <leader>z :ls<cr>
-nmap <leader>g :GtImporter<cr>
+" Java Importer
+let g:JavaImpPaths = $HOME."/javasource"
+let g:JavaImpDataDir = $HOME."/javaimp_cache"
+let g:JavaImpDataDir = $HOME."/javaimp_cache"
+let g:JavaImpDocPaths= $HOME."/javadoc"
+let g:JavaImpDocViewer = "lynx"
+" Import class
+nmap <leader>ji :JI<CR>
+" Sort class import
+nmap <leader>js :JIS<CR>
+" View file
+nmap <leader>jf :JIF<CR>
+" Java Doc
+nmap <leader>jD :JID<CR>
+
 
 " window and buff navigation
 nmap <Tab> :bn<cr>
@@ -228,7 +238,8 @@ let g:miniBufExplSplitBelow=1
 nmap <leader>a :e  
 nmap <leader>e :e  
 nmap <leader>z :ls<cr>
-nmap <leader>g :GtImporter<cr>
+
+
 
 " window and buff navigation
 nmap <Tab> :bn<cr>
@@ -288,6 +299,17 @@ iab println System.out.println
 iab FlagSpec @FlagSpec(altName = "", help = "")<cr>public static final Flag<
 iab Loggers private static final FormattingLogger logger =<cr>Loggers.getContextFormattingLogger();
 endfunction
+
+" Read .class using javap decompiler
+function! s:ReadClass(dir, classname)
+  execute "cd " . a:dir
+  execute "0read !javap -c " . a:classname
+  1
+  setlocal readonly
+  setlocal nomodified
+endfunction
+autocmd BufReadCmd *.class call <SID>ReadClass(expand("<afile>:p:h"), expand("<afile>:t:r"))
+" End Read .class
 
 augroup filetypedetect
   au BufNewFile,BufRead *.pig set filetype=pig syntax=pig

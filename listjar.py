@@ -20,8 +20,14 @@ def show_jar_classes(jar_file):
 
 
 def main():
-  print 'list jar file:%s' % sys.argv[1]
-  show_jar_classes(sys.argv[1])
+  from optparse import OptionParser
+  parser = OptionParser()
+
+  (options,args) = parser.parse_args()
+
+  for arg in args:
+    print 'list jar file:%s' % arg
+    show_jar_classes(arg)
 
 
 if __name__ == '__main__':

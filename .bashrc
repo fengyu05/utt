@@ -51,6 +51,18 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
 . /etc/bash_completion
 fi
 
+export NETREPO=svn+ssh://svn.corp.linkedin.com/netrepo/network
+export LIREPO=svn+ssh://svn.corp.linkedin.com/lirepo
+export VENREPO=svn+ssh://svn.corp.linkedin.com/vendor
+
+#export JAVA_HOME=/export/apps/jdk/JDK-1_6_0_27
+#export JDK_HOME=/export/apps/jdk/JDK-1_6_0_27
+export JAVA_HOME=/export/apps/jdk/JDK-1_8_0_5
+export JDK_HOME=/export/apps/jdk/JDK-1_8_0_5
+export NLS_LANG=American_America.UTF8
+
+export M2_HOME=/local/maven
+
 ##########################################################################################
 # zhdeng begin here
 ##########################################################################################
@@ -66,15 +78,33 @@ export ALL_NEW_PATH="
   /usr/local/apache-maven/bin
   $HOME/voldemort/bin
   /opt/likewise/bin
+  $M2_HOME/bin
+  $HOME/.rbenv/bin
+  $JAVA_HOME/bin
+  /usr/local/bin
+  /usr/local/mysql/bin
+  /usr/local/linkedin/bin
+  /home/zhdeng/.linuxbrew/bin
   "
-  
+
 for newPath in $ALL_NEW_PATH
 do
   if [ -d $newPath ]; then
     PATH=$PATH:$newPath
   fi
 done
-  
+
+
+eval "$(rbenv init -)"
+
+eval `keychain --eval --agents ssh github_rsa`
+if [ -x /usr/bin/keychain ] ; then
+	MYNAME=`/usr/bin/whoami`
+	if [ -f ~/.ssh/${MYNAME}_at_linkedin.com_dsa_key ] ; then
+	      /usr/bin/keychain ~/.ssh/${MYNAME}_at_linkedin.com_dsa_key
+      	      . ~/.keychain/`hostname`-sh
+	fi
+fi
 
 export EDITOR='vi'
 export localhost=127.0.0.1
@@ -83,6 +113,8 @@ export HOST_NAME=`cat $HOME/.HOST_NAME`
 export WP=$HOME/workspace
 export M2_HOME=/usr/local/apache-maven
 export M2=$M2_HOME/bin
+export TSCPBE=$HOME/workspace/tscp-backend_trunk
+export BAM_OFFLINE=$WP/recls/bam_offline
 
 # ALIAS ALIAS
 alias work='ssh zhdeng@zhdeng-ld1'
@@ -106,28 +138,31 @@ alias lf='load_file'
 alias hfs="hadoop fs"
 alias wp='cd ~/workspace'
 alias forecast_wp='wp;cd forecast_trunk'
-alias nertz_fcst='cd $HOME/production/nertz_fcst'
-alias fcst_nertz='cd $HOME/production/nertz_fcst'
 alias fcst_dep='ligradle offline:forecasting-offline-common:dependencies | tee dep.list'
-alias h2clean='cd $HOME/production/h2clean'
 alias network_wp='wp;cd network_trunk'
-alias mlutt='cd $HOME/mlutt'
-alias adsutt='cd $HOME/adsutt'
-alias adsrele='wp;cd ads-relevance_trunk'
-alias tscp='wp;cd tscp_trunk'
-alias tscp_backend='wp;cd tscp-backend_trunk'
-alias metronome='wp;cd metronome_trunk'
+alias cd_mlutt='cd $HOME/mlutt'
+alias cd_admm='cd $HOME/ars-admm_trunk'
+alias cd_adsutt='cd $HOME/adsutt'
+alias cd_adsrel='wp;cd ads-relevance_trunk'
+alias cd_tscp='wp;cd tscp_trunk'
+alias cd_tscpbe='wp;cd tscp-backend_trunk'
+alias cd_ucf='wp;cd ucf_trunk'
+alias cd_bam='wp;cd bam_trunk'
+alias cd_bam_offline='wp;cd recls; cd bam-offline'
+alias cd_bam_ev='wp;cd evaluator;'
+alias cd_autoapprove='wp;cd autoadapprovalmlmodel;'
+alias cd_metronome='wp;cd metronome_trunk'
 alias cd_liar='network_wp; cd liar/'
 alias cd_lame='network_wp; cd liar/lame/java/com/linkedin/liar/lame/'
 alias cd_az='wp; cd azkaban'
+alias cd_pig='wp; cd pig'
+alias cd_avro='wp; cd avro'
 alias cd_liarloser='network_wp; cd liar/loser/java/com/linkedin/liar/'
 alias cd_loser='wp; cd loser_trunk'
 alias cd_csp_impl='network_wp; cd sasbe/cspserving-impl'
 alias cd_sasbe='network_wp; cd sasbe'
 alias cd_network='network_wp;'
 alias cd_recls='wp;cd recls'
-alias cd_model_sample='recls; cd autobahn/models/lame'
-alias cd_floor='wp;cd member-floor'
 alias cd_log='cd /export/content/lid/apps/apps/dev-i001/logs'
 alias cd_tomcat_log='cd /export/content/lid/apps/tomcat/dev-i001/logs'
 alias cd_fcst_log='cd /export/content/lid/apps/forecasting-service/dev-i001/logs' 
@@ -136,22 +171,21 @@ alias tail_log='cd_log;tail -f apps.out'
 alias fcst_monitoring='wp;cd fcst-monitoring'
 alias tail_fcst_log='cd_fcst_log;tail -f forecasting-service.out' 
 alias tail_tomcat_log='cd_tomcat_log;tail -f catalina.out'
-alias recls='wp;cd recls'
 alias cd_pg='wp;cd playground'
 alias cd_insight='wp;cd insight'
-alias uscp='wp;cd uscp_trunk'
+alias cd_uscp='wp;cd uscp_trunk'
 alias ssh_prod_csp='ssh-range -f PROD-ELA4 csp-service'
 alias ssh_ei_csp='ssh-range -f EI1 csp-service'
 alias gitcommit='git commit -m "by auto commiter"'
 alias git_push_origin='git push -u origin master'
-alias git_list='git ls-tree -r master --name-only'
+alias git_list_unpushed='git log origin/master..HEAD --name-only'
+alias git_list_unpushed2='_mapff `git_list_unpushed | tail -n +6`'
 alias kill_fg='kill -9 $(jobs -p)'
 alias restli_get='curli --pretty-print "%s" -X GET -g'
 alias build_and_release='ligradle build -x test;mint release'
 alias git_info='git remote show origin'
 alias build_without_test='ligrade build -x test'
 alias jar_list='jar tf '
-alias sasAjax='ff SasAjaxController.java;rf3'
 alias mint_devdeploy='mint build;mint release;mint build-cfg -f dev;mint release-cfg;mint deploy'
 alias mint_qeideploy='mint build;mint release;mint build-cfg -f QEI1;mint release-cfg;mint deploy'
 alias mint_qei2deploy='mint build;mint release;mint build-cfg -f QEI2;mint release-cfg;mint deploy'
@@ -167,7 +201,9 @@ alias fcst_init='_user_do fcst kinit -kt fcst.headless.keytab fcst'
 alias bids_init='_user_do bids kinit -kt bids.headless.keytab bids'
 alias liads_init='_user_do liads kinit -kt liads.headless.keytab liads'
 alias sibyl='cd ~/pip_dist/sibyl'
-alias update_az_ctrl='cp ~/mlutt/az_ctrl.py ~/workspace/tscp-backend_trunk/plugin/'
+alias tscpbe='./tscebe'
+alias pip_upload='python setup.py sdist bdist_wheel upload'
+alias tscp_deploy_all_fcst='./tscpbe deploy scin & ./tscpbe deploy inmail & ./tscpbe deploy pacing & ./tscpbe deploy bids'
 
 alias rf1='record_file $F1'
 alias rf2='record_file $F2'
@@ -214,14 +250,6 @@ return 1
 esac
 }
 
-non_empty () {
-if [ $# -eq 0 ]; then
-echo "usage: cmd arg1"
-return 1
-fi
-return 0
-}
-
 function rebash() {
 source ~/.bashrc
 }
@@ -238,39 +266,6 @@ cp ~/.vimrc ~/vimrc
 
 function pg() {
   cd ~/playground/network_trunk
-}
-
-gnefihz_config_file=(.bashrc .vimrc .vim motto)
-function upload_config() {
-sure 'Are you sure upload config to /home/gnefihz?'
-if [ $? -eq 0 ]; then
-echo 'uploading...'
-gnefihz_home=/home/gnefihz
-for item in ${gnefihz_config_file[*]}
-do
-cp -r ~/$item $gnefihz_home
-done
-else
-echo 'cancel'
-fi
-}
-
-function download_config() {
-sure 'Are you sure download config file from /home/gnefihz to local?'
-if [ $? -eq 1 ]; then
-return
-fi
-sure 'Are you sure again?'
-if [ $? -eq 0 ]; then
-echo 'downloading ....'
-gnefihz_home=/home/gnefihz
-for item in ${gnefihz_config_file[*]}
-do
-cp -r $gnefihz_home/$item ~/
-done
-else
-echo 'cancel'
-fi
 }
 
 
@@ -418,29 +413,6 @@ function nertz2() {
   ssh -K eat1-nertzgw02.grid.linkedin.com
 }
 
-function copy_from_magic() {
-  if [ $# -lt 1 ] ; then
-    echo "copy_from_magic path"
-    return 1
-  fi
-  name=`basename $1`
-  echo "ssh copying..."
-  ssh -q -K -tt eat1-magicgw01.grid.linkedin.com "rm -rf ~/.magic_file_cache;mkdir ~/.magic_file_cache;hadoop fs -copyToLocal $1 ~/.magic_file_cache/;copy_to_home ~/.magic_file_cache/$name" 
-  rm -rf ./$name
-  mv ~/incoming/$name ./$name
-}
-
-function copy_all_from_magic() {
-  if [ $# -lt 1 ] ; then
-    echo "copy_from_magic path"
-    return 1
-  fi
-  name=`basename $1`
-  echo "ssh copying..."
-  ssh -q -K -tt eat1-magicgw01.grid.linkedin.com "rm -rf ~/.magic_file_cache;mkdir -p ~/.magic_file_cache/$name;hadoop fs -copyToLocal $1/* ~/.magic_file_cache/$name/;copy_to_home ~/.magic_file_cache/$name" 
-  mv ~/incoming/$name ./$name
-}
-
 function canasta() {
   ssh -K eat1-hcl0041.grid.linkedin.com
 }
@@ -573,6 +545,34 @@ function send_bashrc() {
 
 function biggest_file() {
   find $1 -printf '%s %p\n'| sort -nr | head -50
+}
+
+function update_az_ctrl() {
+  cp ~/mlutt/az_ctrl.py ~/workspace/tscp-backend_trunk/plugin/
+  cp ~/mlutt/az_ctrl.py ~/mlutt/release/
+  cp ~/mlutt/az_ctrl.py ~/pip_dist/azkaban_ctrl/azkaban_ctrl/
+}
+
+function load_production_fcst_cluster() {
+  ssh -t -AL 18882:localhost:18882 eng-portal.corp.linkedin.com 'ssh ela4-app5663.prod.linkedin.com -L 18882:ela4-app5663.prod.linkedin.com:8882'
+}
+
+function load_production_fcst_segment_cluster() {
+  ssh -t -AL 18089:localhost:18089 eng-portal.corp.linkedin.com 'ssh ela4-app5663.prod.linkedin.com -L 18089:ela4-app5663.prod.linkedin.com:8089'
+}
+
+function ssh_add_github() {
+  eval "$(ssh-agent -s)"
+  ssh-add ~/.ssh/github_rsa
+}
+
+function ssh_add_gitli() {
+  eval "$(ssh-agent -s)"
+  ssh-add ~/.ssh/zhdeng_at_linkedin.com_dsa_key
+}
+
+function git_list_edit() {
+  _mapff `git status | grep -E 'new file:|modified:' | cut -d ':' -f 2`
 }
 ############### sample section
 function _for_item() {
