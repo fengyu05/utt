@@ -1,0 +1,11 @@
+let g:netrw_dirhistmax  =10
+let g:netrw_dirhist_cnt =9
+let g:netrw_dirhist_1='/home/zhdeng/workspace/evaluator/featureGenerator/src/main/java/com/linkedin/vwfeaturegenerator'
+let g:netrw_dirhist_2='/home/zhdeng/workspace/tscp-backend_trunk/shared/forecast/src/main/properties'
+let g:netrw_dirhist_3='/home/zhdeng/workspace/tscp-backend_trunk/shared/forecast/src/main/jobs-bids'
+let g:netrw_dirhist_4='/home/zhdeng/workspace/tscp-backend_trunk/apps/auto-review'
+let g:netrw_dirhist_5='/home/zhdeng/workspace/tscp-backend_trunk/apps/auto-review/azkaban'
+let g:netrw_dirhist_6='/home/zhdeng/workspace/tscp-backend_trunk/apps/auto-review/azkaban/src'
+let g:netrw_dirhist_7='/home/zhdeng/workspace/tscp-backend_trunk/apps/auto-review/azkaban/src/pig'
+let g:netrw_dirhist_8='/home/zhdeng/workspace/tscp-backend_trunk/apps/auto-review'
+let g:netrw_dirhist_9='/home/zhdeng/workspace/recls/bam-offline/zip/lib'
