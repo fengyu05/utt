@@ -77,7 +77,6 @@ export ALL_NEW_PATH="
   $HOME/bin
   $HOME/bin/activator/activator-1.2.12
   $HOME/utt
-  $HOME/adsutt
   $HOME/mlutt
   $HOME/spark/bin
   $HOME/expect
@@ -92,6 +91,8 @@ export ALL_NEW_PATH="
   /usr/local/linkedin/bin
   $HOME.linuxbrew/bin
   $HOME/workspace/kafka-console-consumer
+  /export/content/linkedin/bin
+  $HOME/package/gradle-2.13/bin
   "
 
 for newPath in $ALL_NEW_PATH
@@ -120,7 +121,8 @@ export WP=$HOME/workspace
 export M2_HOME=/usr/local/apache-maven
 export M2=$M2_HOME/bin
 export TSCPBE=$HOME/workspace/tscp-backend_trunk
-export BAM_OFFLINE=$WP/recls/bam_offline
+export SAS_EI_JDBC='jdbc:oracle:thin:sas/sas8uat@eat1-dc1-eidb-sas.stg.linkedin.com:1521/EI_EIDB_SAS'
+export SAS_LOCAL_HOST='localhost:10038/sas-campaign/resources/adCreatives'
 
 # Aquire IP on linux
 [ -x /sbin/ip ] && export HOME_IP=`ip addr | grep 'state UP' -A2 | tail -n1 | awk '{print $2}' | cut -f1  -d'/'`
@@ -141,91 +143,25 @@ alias cls="clear"
 alias listjar="ls *.jar | xargs -Ifn sh -c 'echo fn;jar tf fn'"
 alias check_port='netstat -lpn'
 alias svn='svin'
-alias gradle='ligradle'
-alias rf='record_file'
+alias rf='lf'
 alias list='list_file'
-alias lf='load_file'
 alias hfs="hadoop fs"
 alias wp='cd ~/workspace'
-alias cd_forecast='wp;cd forecast_trunk'
-alias cd_spark='cd $HOME/spark'
-alias cd_money_spark='wp; cd money-spark'
 alias network_wp='wp;cd network_trunk'
-alias cd_mlutt='cd $HOME/mlutt'
-alias cd_admm='cd $HOME/ars-admm_trunk'
-alias cd_adsutt='cd $HOME/adsutt'
-alias cd_adsrel='wp;cd ads-relevance_trunk'
-alias cd_tscp='wp;cd tscp_trunk'
-alias cd_tscp2='wp;cd tscp_trunk2'
-alias cd_tscp_prod='cd $HOME/prod/tscp_trunk'
-alias cd_tscp_prod2='cd $HOME/prod/tscp_trunk2'
-alias cd_tscp_prod3='cd $HOME/prod/tscp_trunk3'
-alias cd_tscp_tracking='wp;cd tscp-tracking_trunk'
-alias cd_tscpbe='wp;cd tscp-backend_trunk'
-alias cd_tscp_api='wp;cd tscp-api_trunk'
-alias cd_tscpbe_prod='wp;cd $HOME/tscp-backend_trunk2'
-alias cd_tscpbe_lib='wp;cd $HOME/tscp-backend_trunk_lib'
-alias cd_tscp_frontend='wp;cd tscp-admin-frontend_trunk'
-alias cd_tracker='wp;cd tracker_trunk'
-alias cd_ucf='wp;cd ucf_trunk'
-alias cd_bam='wp;cd bam_trunk'
-alias cd_bam_api='wp;cd bam-api_trunk'
-alias cd_bam_offline='wp;cd recls; cd bam-offline'
-alias cd_bam_ev='wp;cd evaluator;'
-alias cd_pinot='wp;cd pinot-hadoop_trunk;'
-alias cd_autoapprove='wp;cd autoadapprovalmlmodel;'
-alias cd_autoreview='cd $HOME/auto-review;'
-alias cd_metronome='wp;cd metronome_trunk'
-alias cd_liar='network_wp; cd liar/'
-alias cd_liar_hadoop='wp; cd liar-hadoop_trunk/'
-alias cd_lame='network_wp; cd liar/lame/java/com/linkedin/liar/lame/'
-alias cd_az='wp; cd azkaban'
-alias cd_pig='wp; cd pig'
-alias cd_avro='wp; cd avro'
-alias cd_avro_schemas='wp; cd avro-schemas_trunk'
-alias cd_avsc='wp; cd avro-schemas_trunk'
-alias cd_liarloser='network_wp; cd liar/loser/java/com/linkedin/liar/'
-alias cd_loser='wp; cd loser_trunk'
-alias cd_csp_impl='network_wp; cd sasbe/cspserving-impl'
-alias cd_sas='network_wp; cd sas'
-alias cd_sasbe='network_wp; cd sasbe'
-alias cd_network='network_wp;'
-alias cd_network2='wp; cd network_trunk2;'
-alias cd_recls='wp;cd recls'
-alias cd_recls_prod='cd $HOME/prod/recls'
-alias cd_schemas='wp;cd avro-schemas_trunk'
-alias cd_log='cd /export/content/lid/apps/apps/dev-i001/logs'
-alias cd_tomcat_log='cd /export/content/lid/apps/tomcat/dev-i001/logs'
-alias cd_fcst_log='cd /export/content/lid/apps/forecasting-service/dev-i001/logs'
-alias cd_fcst_war='cd $HOME/local-repo/com/linkedin/forecast/forecasting-service-war'
-alias cd_chimera='wp;cd chimera_trunk'
 alias tail_log2='cd_log;tail -f apps.out | grep -v "INFO \[Lix\]" | grep -v "INFO \[ClientAdapter\]" | grep -v "INFO \[ZkBasedSchemaRegistry\]" | grep -v "INFO \[DatabusHttpV3ClientImpl\]"'
 alias tail_log='cd_log;tail -f apps.out '
+alias tail_doglog='cd /export/content/lid/apps/watchdog-ads-test-service/dev-i001/logs;tail -f watchdog-ads-test-service.out'
 alias tail_error_log='cd_log;tail -f apps.out |  grep -n "ERROR"  | grep -v "INFO \[Lix\]"'
 alias grep_error_log='cd_log;cat apps.out |  grep -n "ERROR"  | grep -v Lix'
 alias grep_warn_log='cd_log;cat apps.out |  grep -E "ERROR|WARN"  | grep -v Lix'
-alias tail_fcst_log='cd_fcst_log;tail -f forecasting-service.out'
 alias tail_tomcat_log='cd_tomcat_log;tail -f catalina.out'
-alias cd_insight='wp;cd insight'
-alias cd_uscp='wp;cd uscp_trunk'
-alias cd_pegasus='wp;cd pegasus_trunk'
-alias cd_common_template='wp;cd common-templates'
-alias cd_pdsc='wp;cd pegasus_trunk'
-alias ssh_prod_csp='ssh-range -f PROD-ELA4 csp-service'
-alias ssh_ei_csp='ssh-range -f EI1 csp-service'
-alias git_push_origin='git push -u origin master'
-alias git_checkout_origin='git checkout origin/master'
-alias git_list_unpushed='git log origin/master..HEAD --name-only'
-alias git_list_unpushed2='_mapff `git_list_unpushed | tail -n +6`'
 alias kill_fg='kill -9 $(jobs -p)'
 alias build_and_release='ligradle build -x test;mint release'
-alias git_info='git remote show origin'
 alias build_without_test='ligrade build -x test'
 alias jar_list='jar tf '
-alias undeploy_sas='mint undeploy -f QEI1 -w sas-war && mint kill && mint clean-containers'
-alias deploy_sas='ligradle :sas:sas-war:build && mint build-cfg -f QEI1 -w sas-war && mint deploy -f QEI1 -w sas-war --debug-app'
-alias deploy_sas2='ligradle :sas:sas-war:build && mint build-cfg -f QEI2 -w sas-war && mint deploy -f QEI2 -w sas-war --debug-app'
 alias deploy_zookeeper='mint deploy -w zookeeper-war'
+alias deploy='deploy.py'
+alias bql='bql.py'
 alias aws_dev='ssh -i ~/.keycache/amazon.pem ec2-user@54.187.146.185'
 alias fcst_do='_user_do fcst'
 alias bids_do='_user_do bids'
@@ -236,8 +172,6 @@ alias liads_init='_user_do liads kinit -kt liads.headless.keytab liads'
 alias sibyl='cd ~/pip_dist/sibyl'
 alias tscpbe='./tscebe'
 alias pip_upload='python setup.py sdist bdist_wheel upload'
-alias tscp_deploy_all_fcst='./tscpbe deploy scin & ./tscpbe deploy inmail & ./tscpbe deploy pacing & ./tscpbe deploy bids'
-alias autoreview_quality='mail_chart.py /jobs/adreview/auto-review/training/metrics/test/_charts'
 alias download_autoreview_model='copy_from_gateway.py /jobs/adreview/auto-review/training/model/all/maxent'
 alias ligradle_build_xtest='ligradle build -x test --parallel'
 alias snapshot_release_x='ligradle_build_xtest; mint release'
@@ -245,35 +179,18 @@ alias snapshot_release='snapshot_release_x'
 alias patch_a_diff='patch -p0 -i '
 alias vimr='vim -R'
 alias build_tscp_sasbe='ligradle sasbe:tscp-sasbe-impl:build'
-alias cd_model='wp; cd models_trunk'
-alias cd_databus_event='wp; cd databus-events_trunk'
-alias cd_databus2='wp; cd databus2_trunk'
-alias cd_ucv='wp; cd content-validation-api_trunk'
-alias cd_security='wp; cd security_trunk'
-alias compile_avro_schema='java -jar ~/javajar/avro-tools-1.4.0.jar compile schema '
 alias stb_assembly='sbt/sbt assembly'
 alias eclipse='/export/apps/xtools/eclipse-4.3/eclipse'
-
-alias rf1='record_file $F1'
-alias rf2='record_file $F2'
-alias rf3='record_file $F3'
-alias rf4='record_file $F4'
-alias rf5='record_file $F5'
-alias rf6='record_file $F6'
-alias rf7='record_file $F7'
-alias rf8='record_file $F8'
-alias rf9='record_file $F9'
-
-bind '"\eOP":"vim $F1\n"'
-bind '"\eOQ":"vim $F2\n"'
-bind '"\eOR":"vim $F3\n"'
-bind '"\eOS":"vim $F4\n"'
-bind '"\e[15~":"vim $F5\n"'
-bind '"\e[17~":"vim $F6\n"'
-bind '"\e[18~":"vim $F7\n"'
-bind '"\e[19~":"vim $F8\n"'
-bind '"\e[20~":"vim $F9\n"'
-bind '"\e[21~":"vim $F10\n"'
+alias databus_interactive='$HOME/databus2-cmdline-tools-pkg/bin/dbus2-interactive-avro-schema-gen.sh'
+alias su_aaa_roc='mail_chart.py /jobs/adreview/aaa/su-content-model-metrics/_charts'
+alias aaa_roc='copy_from_gateway.py /jobs/adreview/aaa/roc-csv ; roc.py /home/zhdeng/incoming/roc-csv/* -i -r 2'
+alias sas='sas.py'
+alias xopen='xdg-open'
+alias weka='cd $HOME/package/weka-3-6-13/;java -Xmx1000M -jar weka.jar'
+alias weka_test='java8 -cp ./build/weka-cli/libs/weka-cli-0.0.1-SNAPSHOT.jar:/home/zhdeng/package/weka-3-7-13/weka.jar com.linkedin.weka.SimpleClassifierCli'
+alias java8='$HOME/package/jdk1.8.0_51/bin/java'
+alias test_single='ligradle test -Dtest.single='
+alias gradle='gradle2'
 
 PS1="=== $HOST_NAME === \u@\w\$"
 
@@ -303,6 +220,10 @@ function rebash() {
 source ~/.bashrc
 }
 
+function reffrc() {
+source ~/.ffrc
+}
+
 function bashrc() {
 vim ~/.bashrc
 cp ~/.bashrc ~/utt/.bashrc
@@ -310,147 +231,23 @@ cp ~/.bashrc ~/utt/.bashrc
 
 function vimrc() {
 vim ~/.vimrc
-cp ~/.vimrc ~/vimrc
-}
-
-function listfile() {
-LFS=`find . -name $1`
-LFA=( $LFS)
-LF=${LFA[0]}
-
-echo "All"
-echo $LFS
-echo "Selected"
-echo $LF
-}
-
-function ggg() {
-  if [ $# -lt 1 ] ; then
-    echo "usage: greplg keyword"
-    return
-  fi
-  source_file $WP | xargs -I "fn" grep "$1" -n -B 2 --with-filename -A 2 --color=auto "fn"
-}
-
-function gg() {
-if [ $# -lt 1 ] ; then
-echo "usage: greplg keyword"
-return
-fi
-source_file | xargs -I "fn" grep "$1" -n -B 2 --with-filename -A 2 --color=auto "fn"
-}
-
-function gglist() {
-if [ $# -lt 1 ] ; then
-echo "usage: greplg keyword"
-return
-fi
-source_file | xargs -I "fn" grep "$1" --with-filename "fn" | cut -d: -f 1 | uniq
-}
-
-function ggeditall() {
-if [ $# -lt 1 ] ; then
-echo "usage: greplg keyword"
-return
-fi
-F=`source_file | xargs -I "fn" grep "$1" --with-filename "fn" | cut -d: -f 1 | uniq`
-vim $F
-}
-
-function text_file() {
-  find . -name "*.java" -o -name "*.js" -o -name "*.html" -o -name "*.pig" \
-      -o -name "*.jobs" -o -name "*.py" -o -name "*.properties"
-}
-
-function source_file() {
-  if [ $# -lt 1 ] ; then
-    TARGET=.
-  else
-    TARGET=$1
-  fi
-  find $TARGET -type d \( -path "*/.svn" -o -path "*/build" -o -path "*/.git"  \) -prune -o \
-  -type f \( -iname "tags" \) -prune -o -type f -exec grep -Il . {} \;
+cp ~/.vimrc ~/utt/.vimrc
 }
 
 function list_all_build() {
   _mapff `find . -name 'build.gradle'`
 }
 
-_mapff() {
-i=1
-export __all_ff=$* 
-for file in $* 
-do
-  if ((i % 2 == 0))
-  then
-    printf "\e[1;32m"
-  fi
-  export F$i=$file
-  echo "[F$i]" $file 
-  let " i+= 1"
-  printf "\e[0m"
-done
-}
-
-_ff() {
-  if [ $# -lt 1 ] ; then
-    echo "usage: ff filepattern"
-    return
-  fi
-# \* escaping the asterisk avoid shell expanding
-  find . -name \*"$1"\* -o -type d \( -path "*/build" -o -path "*/.svn" -o -path "*/zip" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn|./zip"
-}
-
-_ffb() {
-  if [ $# -lt 1 ] ; then
-    echo "usage: ff filepattern"
-    return
-  fi
-  find . -name \*"$1"\* -o -type d \( -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v ".git|.svn"
-}
-
-ff() {
-  _mapff `_ff $*`
-}
-
-ffb() {
-  _mapff `_ffb $*`
-}
-
-gff() {
-if [ $# -lt 1 ] ; then
-echo "usage: ff filepattern"
-return
-fi
-_mapff `find $WP -name \*"$1"\* -o -type d \( -path "*/build" -o -p "*/zip" -o -path "*/.svn" -o -path "*/.git" \) -prune | egrep -v "./build|.git|.svn|./zip" | grep --color $1`
-}
-
-load_file() {
-if [ $# -lt 1 ] ; then
-echo ""
-else
-vim -c ":qa" $1
-fi
-}
-
-editall () {
-vim $__all_ff 
-}
-
-loadall () {
-rf $F1; rf $F2; rf $F3;rf $F4;rf $F5;rf $F6;rf $F7;rf $F8;rf $F9;
-}
-
 function motto() {
 sort -R ~/motto | head -n 1
 }
 
-function magic() {
-  ssh -K eat1-magicgw01.grid.linkedin.com
-}
-
 function nertz() {
   ssh -K eat1-nertzgw01.grid.linkedin.com
+}
+
+function holdem() {
+  ssh -K ltx1-holdemgw01.grid.linkedin.com
 }
 
 function war() {
@@ -461,31 +258,13 @@ function portal() {
   ssh -K eng-portal
 }
 
-function canasta() {
-  ssh -K eat1-hcl0041.grid.linkedin.com
-}
-
 function kill_sth() {
 kill `ps aux | grep $1 | grep -v grep | cut -d " " -f 4`
 }
 
-
 function prun() {
   echo $*
   eval "$*"
-}
-
-function record_file() {
-  if [ $# -lt 1 ] ; then echo "Need one arg"; fi
-  touch ./.filelist
-  echo $1 >> ./.filelist 
-  cp ./.filelist ./.bak_filelist
-  tail -20 ./.bak_filelist > ./.filelist 
-  lf $1
-}
-
-function list_file() {
-  _mapff `tac ./.filelist`
 }
 
 function svn_update_review() {
@@ -513,18 +292,6 @@ function svn_remove_cl() {
     xargs svn changelist --remove
 }
 
-function gradle_clean_build_zip() {
-  find . -name "*.zip" | xargs -Ifn rm fn
-}
-
-function deploy_campaign_withconfig2() {
-  mint clean && mint dev build build-cfg deploy -w sasbe-campaign-war -f QEI2
-}
-
-function deploy_campaign_withconfig() {
-  mint clean && mint dev build build-cfg deploy -w sasbe-campaign-war -f QEI1
-}
-
 function cut_two_edge() {
   cat $1 | cut -c $2- | rev | cut -c $3- | rev
 }
@@ -539,11 +306,6 @@ function undeflated() {
 
 function ts2readable() {
   date -d @$1
-}
-
-function nertz_copy_from_magic() {
-  cmd="hadoop distcp -D dfs.checksum.type=CRC32 webhdfs://eat1-magicnn01.grid.linkedin.com:50070$1 hdfs://eat1-nertznn01.grid.linkedin.com:9000$2"
-  prun $cmd
 }
 
 function war_copy_from_nertz() {
@@ -595,9 +357,14 @@ function update_az_ctrl() {
   cp ~/mlutt/az_ctrl.py ~/pip_dist/azkaban_ctrl/azkaban_ctrl/
 }
 
+function load_production_pinot2_controller() {
+ ssh  -A -L 11984:localhost:8080 eng-portal.corp.linkedin.com 'ssh lva1-app13279.prod.linkedin.com -L 8080:ltx1-pinot-controller-vip-1.prod.linkedin.com:11984'  
+  #print 'http://localhost:11984/query/'
+}
+
 function load_production_fcst_cluster() {
   ssh -t -AL 18882:localhost:18882 eng-portal.corp.linkedin.com 'ssh ela4-app5663.prod.linkedin.com -L 18882:ela4-app5663.prod.linkedin.com:8882'
-  print 'http://localhost:18082'
+  print 'http://localhost:18882'
 }
 
 function load_production_fcst_segment_cluster() {
@@ -607,12 +374,17 @@ function load_production_fcst_segment_cluster() {
 
 function load_production_bids_cluster() {
   ssh -t -AL 18882:localhost:18882 eng-portal.corp.linkedin.com 'ssh ela4-app7216.prod.linkedin.com -L 18882:ela4-app7216.prod.linkedin.com:8882'
-  print 'http://localhost:18082'
+  print 'http://localhost:18882'
 }
 
 function load_production_bids_segment_cluster() {
   ssh -t -AL 18089:localhost:18089 eng-portal.corp.linkedin.com 'ssh ela4-app7216.prod.linkedin.com -L 18089:ela4-app7216.prod.linkedin.com:8089'
   print 'http://localhost:18089'
+}
+
+function load_production_pacing_cluster() {
+  ssh -t -AL 18882:localhost:18882 eng-portal.corp.linkedin.com 'ssh ela4-app6715.prod.linkedin.com -L 18882:ela4-app6715.prod.linkedin.com:8882'
+  print 'http://localhost:18882'
 }
 
 function proxy_to_schema_registry() {
@@ -633,10 +405,6 @@ function ssh_add_gitli() {
 function portal_run() {
   cmd="ssh -q -K -tt eng-portal \"$*\""
   prun $cmd
-}
-
-function git_list_edit() {
-  _mapff `git status | grep -E 'new file:|modified:' | cut -d ':' -f 2`
 }
 
 function build_vim_java_imports() {
@@ -678,6 +446,25 @@ function pinot_hosts() {
   app-status -fg prod  pinot-senseidb
 }
 
+function pinot2_hosts() {
+  if [ $# -lt 2 ]; then
+    echo "ex: pinot2_hosts prod-lva1 scin-forecast"
+    return 1
+  fi
+  app-status -f $1 pinot-server | egrep "`eh -u %prod-lva1.pinot20-$2:SERVER | sed 's/,/|/g'`"
+}
+
+function pinot2_broker() {
+  if [ $# -lt 2 ]; then
+    echo "ex: pinot2_broker prod-lva1 scin-forecast"
+    return 1
+  fi
+  eh -e %$1.pinot20-$2:BROKER
+}
+
+function compile_avro_schema() {
+  java -jar ~/javajar/avro-tools-1.4.0.jar compile schema $1 databus-events/databus-events/src/main/java/ 
+}
 
 
 function app_status() {
@@ -686,6 +473,17 @@ function app_status() {
 
 function mint_dependency_update() {
   mint dependency update --product=$F1
+}
+
+function sshtomachine() {
+  ssh-range -f $1 -m $2 $3
+}
+
+function copySasbeSnapshot() {
+  cp $1 ../tscp-api_trunk/tscp-sasbe-api/src/main/snapshot
+}
+function copySasbeIdl() {
+  cp $1 ../tscp-api_trunk/tscp-sasbe-api/src/main/idl
 }
 ############### sample section
 function _for_item() {
@@ -706,4 +504,90 @@ done
 # User specific aliases and functions
 
 # Disable F1
-xmodmap -e 'keycode 67='
+#xmodmap -e 'keycode 67='
+alias cd_forecast='wp;cd forecast_trunk'
+alias cd_opennlp='wp;cd opennlp'
+alias cd_ingraph='wp;cd ingraphs'
+alias cd_spark='cd $HOME/spark'
+alias cd_money_spark='wp; cd money-spark'
+alias cd_mlutt='cd $HOME/mlutt'
+alias cd_admm='cd $HOME/ars-admm_trunk'
+alias cd_adsutt='cd $HOME/adsutt'
+alias cd_adsrel='wp;cd ads-relevance_trunk'
+alias cd_tscp='wp;cd tscp_trunk'
+alias cd_admin='wp;cd tscp-admin-backend_trunk'
+alias cd_admin_prod='cd $HOME/prod/tscp-admin-backend_trunk'
+alias cd_admin2='wp;cd tscp-admin-backend_trunk2'
+alias cd_admin3='wp;cd tscp-admin-backend_trunk3'
+alias cd_tscp_targeting='wp;cd tscp-targeting_trunk'
+alias cd_tscp_tracking='wp;cd tscp-tracking_trunk'
+alias cd_be='wp;cd tscp-backend_trunk'
+alias cd_tscpbe='wp;cd tscp-backend_trunk'
+alias cd_api='wp;cd tscp-api_trunk'
+alias cd_tscp_api='wp;cd tscp-api_trunk'
+alias cd_tscpbe_prod='wp;cd $HOME/prod/tscp-backend_trunk'
+alias cd_tscp_prod='wp;cd $HOME/prod/tscp_trunk'
+alias cd_tscpbe2='wp; cd tscp-backend_trunk2'
+alias cd_tscpbe_lib='wp;cd $HOME/tscp-backend_trunk_lib'
+alias cd_tscp_frontend='wp;cd tscp-admin-frontend_trunk'
+alias cd_tracker='wp;cd tracker_trunk'
+alias cd_ucf='wp;cd ucf_trunk'
+alias cd_bam='wp;cd bam_trunk'
+alias cd_bam_api='wp;cd bam-api_trunk'
+alias cd_bam_offline='wp;cd recls; cd bam-offline'
+alias cd_bam_ev='wp;cd evaluator;'
+alias cd_pinot='wp;cd pinot-hadoop_trunk;'
+alias cd_autoapprove='wp;cd autoadapprovalmlmodel;'
+alias cd_autoreview='cd $HOME/auto-review;'
+alias cd_metronome='wp;cd metronome_trunk'
+alias cd_liar='network_wp; cd liar/'
+alias cd_liar_hadoop='wp; cd liar-hadoop_trunk/'
+alias cd_lame='network_wp; cd liar/lame/java/com/linkedin/liar/lame/'
+alias cd_az='wp; cd azkaban'
+alias cd_pig='wp; cd pig'
+alias cd_avro='wp; cd avro'
+alias cd_avro_schemas='wp; cd avro-schemas_trunk'
+alias cd_avsc='wp; cd avro-schemas_trunk'
+alias cd_liarloser='network_wp; cd liar/loser/java/com/linkedin/liar/'
+alias cd_loser='wp; cd loser_trunk'
+alias cd_csp_impl='network_wp; cd sasbe/cspserving-impl'
+alias cd_sas='network_wp; cd sas'
+alias cd_sasbe='network_wp; cd sasbe'
+alias cd_network='network_wp;'
+alias cd_network2='wp; cd network_trunk2;'
+alias cd_recls='wp;cd recls'
+alias cd_recls_prod='cd $HOME/prod/recls'
+alias cd_schemas='wp;cd avro-schemas_trunk'
+alias cd_log='cd /export/content/lid/apps/apps/dev-i001/logs'
+alias cd_tomcat_log='cd /export/content/lid/apps/tomcat/dev-i001/logs'
+alias cd_fcst_log='cd /export/content/lid/apps/forecasting-service/dev-i001/logs'
+alias cd_fcst_war='cd $HOME/local-repo/com/linkedin/forecast/forecasting-service-war'
+alias cd_chimera='wp;cd chimera_trunk'
+alias cd_insight='wp;cd insight'
+alias cd_uscp='wp;cd uscp_trunk'
+alias cd_pegasus='wp;cd pegasus_trunk'
+alias cd_common_template='wp;cd common-templates'
+alias cd_pdsc='wp;cd pegasus_trunk'
+alias cd_model='wp; cd models_trunk'
+alias cd_arda_frontend='wp; cd arda-frontend'
+alias cd_databus_event='wp; cd databus-events_trunk'
+alias cd_databus2='wp; cd databus2_trunk'
+alias cd_ucv='wp; cd content-validation-api_trunk'
+alias cd_security='wp; cd security_trunk'
+alias cd_domain='wp; cd network_trunk/domain/'
+alias cd_crc='wp; cd content-relevance-classifiers-server_trunk/'
+alias cd_r='cd $HOME/R'
+alias cd_weka_hadoop='wp; cd weka-hadoop_trunk'
+alias cd_laser='wp; cd laser_trunk'
+alias cd_laser8='wp; cd laser8_trunk'
+alias cd_ufs='wp; cd forecasting-service_trunk'
+alias cd_lax='wp; cd lax-service_trunk'
+alias cd_weka='cd $HOME/package/weka-3-6-13'
+alias cd_metronome_examples='wp; cd metronome-examples_trunk' 
+alias cd_container='wp; cd container_trunk' 
+alias cd_metrics='wp; cd metric-defs_trunk' 
+alias cd_ads_topic='wp; cd ads-topic'
+alias cd_pip_dist='cd $HOME/pip_dist'
+alias cd_ff='cd $HOME/pip_dist/ff'
+alias cd_fire_spark='wp; cd fire-spark'
+alias cd_watch_dog='wp; cd watchdog-ads-test-service_trunk'

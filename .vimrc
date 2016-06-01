@@ -1,6 +1,55 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" set line no on
 
+"                 VIMRC FENGYU05
+"
+""" Vundle {{{
+set nocompatible              " be iMproved, required
+filetype off                  " required
+
+" set the runtime path to include Vundle and initialize
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+" alternatively, pass a path where Vundle should install plugins
+"call vundle#begin('~/some/path/here')
+
+" let Vundle manage Vundle, required
+Plugin 'gmarik/Vundle.vim'
+Plugin 'tpope/vim-abolish'
+Plugin 'vim-scripts/mru.vim'
+Plugin 'vim-scripts/taglist.vim'
+Plugin 'fholgado/minibufexpl.vim'
+Plugin 'rustushki/JavaImp.vim'
+Plugin 'ntpeters/vim-better-whitespace'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'kien/ctrlp.vim'
+Plugin 'SirVer/ultisnips'
+Plugin 'honza/vim-snippets'
+Plugin 'derekwyatt/vim-scala'
+Plugin 'akhaku/vim-java-unused-imports'
+Plugin 'tfnico/vim-gradle'
+"Plugin 'jvenant/vim-java-imports' " 
+"Plugin 'Valloric/YouCompleteMe'
+
+
+" All of your Plugins must be added before the following line
+call vundle#end()            " required
+filetype plugin indent on    " required
+" To ignore plugin indent changes, instead use:
+"filetype plugin on
+"
+" Brief help
+" :PluginList       - lists configured plugins
+" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
+" :PluginSearch foo - searches for foo; append `!` to refresh local cache
+" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
+"
+" see :h vundle for more details or wiki for FAQ
+" Put your non-Plugin stuff after this line
+
+"}}}
+
+""" Basic setting {{{
+" set line no on
 set wildmenu
 " Ignore compiled files
 set wildignore=*.o,*~,*.pyc
@@ -38,153 +87,8 @@ set ai "Auto indent
 set si "Smart indent
 set wrap "Wrap lines
 
-" => Status line
-" Always show the status line
-set laststatus=2
-set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
-set listchars=tab:--,trail:!,extends:>,precedes:<
-
-" buff explorer
-let mapleader = "\\"
-let g:mapleader = "\\"
-
-let g:miniBufExplModSelTarget = 1
-let g:miniBufExplorerMoreThanOne = 0
-let g:miniBufExplModSelTarget = 0
-let g:miniBufExplUseSingleClick = 1
-let g:miniBufExplMapWindowNavVim = 1
-let g:miniBufExplVSplit = 25
-let g:miniBufExplSplitBelow=1
-
-" Java Importer
-let g:JavaImpPaths = $HOME."/javasource"
-let g:JavaImpDataDir = $HOME."/javaimp_cache"
-let g:JavaImpDataDir = $HOME."/javaimp_cache"
-let g:JavaImpDocPaths= $HOME."/javadoc"
-let g:JavaImpDocViewer = "lynx"
-" Import class
-nmap <leader>ji :JI<CR>
-" Sort class import
-nmap <leader>js :JIS<CR>
-" View file
-nmap <leader>jf :JIF<CR>
-" Java Doc
-nmap <leader>jD :JID<CR>
-
-
-" window and buff navigation
-nmap <Tab> :bn<cr>
-nmap <S-Tab> :bn<cr>
-
-nmap <C-up> :bp<cr>
-nmap <C-down> :bn<cr>
-
-map <C-j> <C-W>j
-map <C-k> <C-W>k
-map <C-h> <C-W>h
-map <C-l> <C-W>l
-
-" function key
-nmap <F2> :source ~/.vimrc<cr>
-nmap <F3> :e ~/.vimrc<cr>
-nmap <F4> :bd<cr>
-nmap <F5> :Tlist<cr>
-nmap <F6> :MRU<cr>
-nmap <F7> :set number! number?<cr>
-nmap <F8> :set nopaste! nopaste?<cr>
-nmap <F9> :call FindUniqueWords()<cr>
-
-nmap <leader><F12> :qa!<cr>
-nmap <leader><F11> :call PlainMode()<cr>
-nmap <leader><F10> :call PlainMode()<cr>
-nmap <c-`> <esc>
-
-" function key alt
-imap <F1> <esc><F1>
-imap <F2> <esc><F2>
-imap <F3> <esc><F3>
-imap <F4> <esc><F4>
-imap <F5> <esc><F5>
-imap <F6> <esc><F6>
-imap <F7> <esc><F7>
-imap <F8> <esc><F8>
-imap <F9> <esc><F9>
-
-" undo and redo <C-u> <C-r>
-nmap <C-u> :undo<cr>
-nmap u <esc>
-
-" highlight kework
-nmap # #*
-
-" scorlling
-nmap <C-D> 25j
-nmap <C-F> 25k
-" Set 7 lines to the cursor - when moving vertically using j/k
-set so=7
-
-" word correct
-iab pirnt print
-
-" FileType shortcut
-au FileType java call MyJavaConfig()
-function! MyJavaConfig()
-iab println System.out.println
-iab FlagSpec @FlagSpec(altName = "", help = "")<cr>public static final Flag<
-iab Loggers private static final FormattingLogger logger =<cr>Loggers.getContextFormattingLogger();
-endfunction
-
-au FileType python call MyPythonConfig()
-function! MyPythonConfig()
-iab __name__ __name__ == '__main__':<cr>main()
-endfunction
-
-"set shell=bash\ -l don't work
-"set shellcmdflag=-ic work
-
-" function
-" Returns true if paste mode is enabled
-function! HasPaste()
-if &paste
-return 'PASTE MODE '
-en
-return ''
-endfunction
-
-function! GoogleNit()
-execute '!nit.py %'
-endfunction
-
-function! UniqworkCheck()
-execute '!uniqword_checker.py -l 8 %'
-endfunction"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" set line no on
-
-set wildmenu
-" Ignore compiled files
-set wildignore=*.o,*~,*.pyc
-set ruler
-set cmdheight=2
-" A buffer becomes hidden when it is abandoned
-set hid
-
-" Configure backspace so it acts as it should act
-set backspace=eol,start,indent
-set whichwrap+=<,>,h,l
-
-" Makes search act like search in modern browsers
-set incsearch
-
-" Don't redraw while executing macros (good performance config)
-set lazyredraw
-
-" For regular expressions turn magic on
-set magic
-
-" Show matching brackets when text indicator is over them
-set showmatch
-" How many tenths of a second to blink when matching brackets
-set mat=2
+let mapleader = "\"
+let g:mapleader = "\"
 
 " No annoying sound on errors
 set noerrorbells
@@ -212,20 +116,19 @@ setlocal textwidth=500
 colorscheme elflord
 match Label /\s\u\w\+\s/
 
-set lbr
-set ai "Auto indent
-set si "Smart indent
-set wrap "Wrap lines
+" highlight kework
+nmap # #*
 
-" => Status line
+""" end of basic setting }}}
+
+" StatusBar {{{
 " Always show the status line
 set laststatus=2
 set statusline=\ %{HasPaste()}%F%m%r%h\ %w\ \ CWD:\ %r%{getcwd()}%h\ \ \ Line:\ %l
+set listchars=tab:--,trail:!,extends:>,precedes:<
+" StatusBar }}}
 
-" buff explorer
-let mapleader = "\\"
-let g:mapleader = "\\"
-
+" MiniBuffExplorer {{{
 let g:miniBufExplModSelTarget = 1
 let g:miniBufExplorerMoreThanOne = 0
 let g:miniBufExplModSelTarget = 0
@@ -234,38 +137,57 @@ let g:miniBufExplMapWindowNavVim = 1
 let g:miniBufExplVSplit = 25
 let g:miniBufExplSplitBelow=1
 
-" buff ctrl
-nmap <leader>a :e  
-nmap <leader>e :e  
-nmap <leader>z :ls<cr>
+" MiniBuffExplorer End }}}
 
+" JavaImporter {{{
+" Run from commandline:
+" find "$HOME/workspace" | grep build |  grep -e ".classpath$"  | xargs cat | tr ':' '
+' | sort | uniq | tr '
+' ':' > ~/vim/JavaImp/jars"
+let javaImportListCmd = "cat " . $HOME . "/vim/JavaImp/jars"
+let g:JavaImpPaths = system(javaImportListCmd)
+let g:JavaImpPaths .= ":" . $HOME . "/vim/JavaImp/jmplst/jdk.jmplst"
+let g:JavaImpDataDir = $HOME."/javaimp_cache"
+let g:JavaImpDataDir = $HOME."/javaimp_cache"
+let g:JavaImpDocPaths= $HOME."/javadoc"
+let g:JavaImpDocViewer = "lynx"
+let g:JavaImpTopImports = [ ]
 
+" Import class
+nmap <leader>jj :JI<CR>:JIS<CR>
+nmap <leader>ji :JI<CR>
+nmap <leader>g :JI<CR>
+" Sort class import
+nmap <leader>js :JIS<CR>
+" View file
+nmap <leader>jf :JIF<CR>
+" Java Doc
+nmap <leader>jD :JID<CR>
 
-" window and buff navigation
-nmap <Tab> :bn<cr>
-nmap <S-Tab> :bn<cr>
+" JavaImporter end}}}
 
-nmap <C-up> :bp<cr>
-nmap <C-down> :bn<cr>
-
-map <C-j> <C-W>j
-map <C-k> <C-W>k
+" window navigation {{{
 map <C-h> <C-W>h
 map <C-l> <C-W>l
+"}}}
 
-" function key
+" main function key {{{
 nmap <F2> :source ~/.vimrc<cr>
 nmap <F3> :e ~/.vimrc<cr>
 nmap <F4> :bd<cr>
+nmap <F5> :Tlist<cr>
 nmap <F6> :MRU<cr>
 nmap <F7> :set number! number?<cr>
 nmap <F8> :set nopaste! nopaste?<cr>
+nmap <F9> :call PlainMode()<cr>
 
 nmap <leader><F12> :qa!<cr>
-nmap <leader><F9> :call PlainMode()<cr>
+nmap <leader><esc> :qa!<cr>
+nmap <leader><delete> :qa!<cr>
 nmap <c-`> <esc>
+"}}}
 
-" function key alt
+" function key alt {{{
 imap <F1> <esc><F1>
 imap <F2> <esc><F2>
 imap <F3> <esc><F3>
@@ -276,31 +198,74 @@ imap <F7> <esc><F7>
 imap <F8> <esc><F8>
 imap <F9> <esc><F9>
 
-" undo and redo <C-u> <C-r>
+" function key alt }}}
+
+" undo and redo <C-u> <C-r> {{{
 nmap <C-u> :undo<cr>
 nmap u <esc>
+" }}}
 
-" highlight kework
-nmap # #*
+" word correct {{{
+iab pirnt print
+" }}}
 
-" scorlling
+" scorlling {{{
 nmap <C-D> 25j
 nmap <C-F> 25k
 " Set 7 lines to the cursor - when moving vertically using j/k
 set so=7
+" }}}
 
-" word correct
-iab pirnt print
+" buff ctrl {{{
+nmap <leader>a :e  
+nmap <leader>e :e  
+nmap <leader>z :ls<cr>
 
-" FileType shortcut
-au FileType java call MyJavaConfig()
-function! MyJavaConfig()
-iab println System.out.println
-iab FlagSpec @FlagSpec(altName = "", help = "")<cr>public static final Flag<
-iab Loggers private static final FormattingLogger logger =<cr>Loggers.getContextFormattingLogger();
-endfunction
+"buff navigation
+nmap <Tab> :bn<cr>
+nmap <S-Tab> :bp<cr>
+" }}}
 
-" Read .class using javap decompiler
+" NerdTree {{{
+nmap <leader>f :NERDTreeFind<cr>
+" NERDTree End}}}
+
+" Folder {{{
+set foldlevel=1
+set foldmethod=syntax
+set foldnestmax=10
+set nofoldenable
+
+autocmd FileType vim setlocal foldmethod=marker
+" }}}
+
+" Plugin CtrlP {{{
+let g:ctrlp_map='<leader>p'
+let g:ctrlp_max_files=0
+let g:ctrlp_custom_ignore = {
+      'dir': '[V](.git|.hg|.svn|build|_codegen|tmp)$',
+      'file': '\.(so|class|jar|war|pyc)$',
+      \}
+let g:ctrlp_clear_cache_on_exit=0
+let g:ctrlp_switch_buffer='et'
+" }}}
+
+" Snippets {{{
+" Snippets are separated from the engine. Add this if you want them:
+
+" Trigger configuration. Do not use <tab> if you use https://github.com/Valloric/YouCompleteMe.
+let g:UltiSnipsExpandTrigger="<c-y>"
+"let g:UltiSnipsJumpForwardTrigger="<c-b>"
+"let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:UltiSnipsListSnippets="<c-l>"
+
+
+" If you want :UltiSnipsEdit to split your window.
+let g:UltiSnipsEditSplit="vertical"
+
+" Snippets end }}}
+
+" Read .class using javap decompiler {{{
 function! s:ReadClass(dir, classname)
   execute "cd " . a:dir
   execute "0read !javap -c " . a:classname
@@ -309,14 +274,15 @@ function! s:ReadClass(dir, classname)
   setlocal nomodified
 endfunction
 autocmd BufReadCmd *.class call <SID>ReadClass(expand("<afile>:p:h"), expand("<afile>:t:r"))
-" End Read .class
+" End Read .class }}}
 
+""" Pig config {{{
 augroup filetypedetect
   au BufNewFile,BufRead *.pig set filetype=pig syntax=pig
 augroup END
-"set shell=bash\ -l don't work
-"set shellcmdflag=-ic work
+" }}}
 
+""" Function {{{
 " Function begin here, Function mush start with capital letter.
 function! HasPaste()
 if &paste
@@ -352,3 +318,5 @@ function! FindAllTag()
   echo expand("<cword>")
   ta /expand("<cword>")
 endfunction
+
+"}}}

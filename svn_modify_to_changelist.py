@@ -25,7 +25,10 @@ def main(argv):
     if line.startswith('M'):
       modifyFiles.append(line[1:].strip())
     if line.startswith('A'):
-      modifyFiles.append(line[1:].strip())
+      line = line[1:].strip()
+      if line.find('+') >= 0:
+        line = line.split('+')[1].strip()
+      modifyFiles.append(line)
     if line.startswith('D'):
       modifyFiles.append(line[1:].strip())
 
