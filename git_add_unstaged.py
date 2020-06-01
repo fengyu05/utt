@@ -23,7 +23,11 @@ def main(args):
   for line in lines:
     if len(line) <= 1:
       continue
-    line = line[1:].strip() # remove '#' and space
+    # remove '#' and space
+    line = line.strip()
+    if line[0] == '#':
+        line = line[1:]
+    line = line.strip()
 
     if line.startswith('Changes not staged for commit:'):
       started = True
