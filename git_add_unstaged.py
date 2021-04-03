@@ -39,7 +39,12 @@ def main(args):
         elif started and (line.startswith("modified:") or line.startswith("deleted:")):
             fileds = line.split(":")
             assert len(fileds) == 2, "modified format unknown"
-            modifyFiles.append(fileds[1].strip())
+
+            target = fileds[1].strip()
+
+            if target.find('(') != -1: # if target file name have (some condiation)
+                target = target.split('(')[0]
+            modifyFiles.append(target)
 
     if len(modifyFiles) == 0:
         print("Not unstaged file found")
